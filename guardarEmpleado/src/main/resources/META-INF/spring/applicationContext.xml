@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:beans="http://cxf.apache.org/configuration/beans"
+    xmlns:camel="http://cxf.apache.org/transports/camel"
+    xmlns:cxf="http://camel.apache.org/schema/cxf"
+    xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://cxf.apache.org/configuration/beans http://cxf.apache.org/schemas/configuration/cxf-beans.xsd        http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd        http://cxf.apache.org/transports/camel http://cxf.apache.org/transports/camel.xsd        http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+    <cxf:cxfEndpoint address="/javainuse/learn"
+        endpointName="a:SOATestEndpoint" id="CXFTest"
+        serviceClass="com.programa.SOATestEndpoint"
+        serviceName="a:SOATestEndpointService"
+        wsdlURL="META-INF/wsdl/test.wsdl" xmlns:a="http://programa.com"/>
+        
+    <bean class="com.programa.beans.CamelProcessor" id="processor"/>
+    
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		   destroy-method="close">
+		   <property name="driverClassName" value="org.gjt.mm.mysql.Driver" />
+		   <property name="url" value="jdbc:mysql://viewerrealm.cst0lr1fnijg.us-east-2.rds.amazonaws.com:3306/viewerrealmdb" />
+		   <property name="username" value="RandyMarsh" />
+		   <property name="password" value="thebestaround" />
+  	</bean>
+   
+   
+    <camelContext id="camelId" xmlns="http://camel.apache.org/schema/spring">
+        <route id="myRoute">
+            <from id="_from1" uri="cxf://bean://CXFTest"/>
+            <process id="_process1" ref="processor"/>
+        </route>
+    </camelContext>
+</beans>
